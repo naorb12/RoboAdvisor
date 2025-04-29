@@ -1,0 +1,36 @@
+.proposal-card {
+    background-color: #2a2a2a;
+    /* dark card */
+    padding: 24px;
+    border-radius: 12px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+    font-size: 1.1rem;
+    max-width: 600px;
+    width: 100%;
+    color: #d3d3d3;
+    /* soft silver text */
+}
+
+.risk-level {
+    margin-bottom: 12px;
+    font-size: 1.1rem;
+    color: #cb9a06;
+    /* gold risk level */
+}
+
+.proposal-card ul {
+    list-style: none;
+    padding-left: 0;
+}
+
+.proposal-card li {
+    padding: 10px;
+    margin: 6px 0;
+    background-color: #383838;
+    border-radius: 6px;
+    transition: background-color 0.2s ease;
+}
+
+.proposal-card li:hover {
+    background-color: #4d4d4d;
+}

@@ -1,0 +1,20 @@
+.proposal-page {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    padding: 20px;
+    background-color: #1e1e1e;
+    /* dark background */
+}
+
+.proposal-page h2 {
+    color: #cb9a06;
+    /* Gold headline */
+}
+
+.proposal-card h3 {
+    color: #cb9a06;
+    /* Proposal title gold */
+}
