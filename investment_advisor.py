@@ -35,7 +35,7 @@ def main():
             "scores": [3, 2, 1, 0]
         },
         {
-            "question": "How would you react if your investment dropped 15% in a month?",
+            "question": "How would you react if you had a protfolio worth of 1,000,000, it went down to 800,000?",
             "options": [
                 "Buy more (it's an opportunity)",  # high risk
                 "Hold and wait",
