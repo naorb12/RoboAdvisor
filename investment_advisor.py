@@ -13,9 +13,9 @@ def ask_question(question, options):
             print("Please enter a valid number.")
 
 def get_risk_profile(score):
-    if score <= 5:
+    if score < 4:
         return "Conservative"
-    elif score <= 10:
+    elif score < 12:
         return "Moderate"
     else:
         return "Aggressive"
@@ -28,9 +28,9 @@ def main():
             "question": "What is your age?",
             "options": [
                 "Under 30",          # high risk tolerance
-                "30-45",
-                "46-60",
-                "Over 60"            # low risk tolerance
+                "30-50",
+                "50-67",
+                "Over 67"            # low risk tolerance
             ],
             "scores": [3, 2, 1, 0]
         },
@@ -49,7 +49,7 @@ def main():
             "options": [
                 "Capital growth (long term)",     # high risk
                 "Balanced growth and income",
-                "Stable income", #REMOVE!
+               "Stable income", #REMOVE!
                 "Capital preservation"            # low risk
             ],
             "scores": [3, 2, 1, 0]
