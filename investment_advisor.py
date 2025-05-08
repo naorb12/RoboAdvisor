@@ -49,7 +49,7 @@ def main():
             "options": [
                 "Capital growth (long term)",     # high risk
                 "Balanced growth and income",
-                "Stable income",
+                "Stable income", #REMOVE!
                 "Capital preservation"            # low risk
             ],
             "scores": [3, 2, 1, 0]
