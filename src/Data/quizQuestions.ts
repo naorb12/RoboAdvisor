@@ -4,51 +4,56 @@ export const quizQuestions: QuizQuestion[] = [
     {
         id: 1,
         question: "What is your age?",
-        inputType: "slider",
-        min: 18,
-        max: 100,
-        step: 1
-    },
-    {
-        id: 2,
-        question: "How long do you plan to keep your money invested?",
         inputType: "multiple-choice",
         options: [
-            "Less than 3 years",
-            "3–5 years",
-            "5–10 years",
-            "More than 10 years"
+            "Under 30",          // high risk tolerance
+            "30-50",
+            "50-67",
+            "Over 67"            // low risk tolerance
         ]
     },
     {
-        id: 3,
-        question: "How would you react if your portfolio lost 20% of its value in a month?",
+        id: 2,
+        question: "How would you react if you had a protfolio worth of 1,000,000, it went down to 800,000?",
         inputType: "multiple-choice",
         options: [
-            "I would sell everything immediately",
-            "I would be concerned but wait it out",
-            "I would see it as an opportunity to invest more"
+            "Buy more (it's an opportunity)",  // high risk
+            "Hold and wait",
+            "Sell a part to reduce losses",
+            "Sell everything"                  // low risk
+        ],
+    },
+    {
+        id: 3,
+        question: "What is your primary goal?",
+        inputType: "multiple-choice",
+        options: [
+            "Capital growth (long term)",     // high risk
+            "Balanced growth and income",
+            "Stable income", //REMOVE!
+            "Capital preservation"            // low risk
         ]
     },
     {
         id: 4,
-        question: "What is your annual income?",
+        question: "How experienced are you with investing?",
         inputType: "multiple-choice",
         options: [
-            "Less than $50,000",
-            "$50,000–$100,000",
-            "$100,000–$200,000",
-            "More than $200,000"
+            "Very experienced",               // high risk
+            "Somewhat experienced",
+            "Basic knowledge",
+            "No experience"                   // low risk
         ]
     },
     {
         id: 5,
-        question: "How would you rate your investment experience?",
+        question: "How long do you plan to keep your investments?",
         inputType: "multiple-choice",
         options: [
-            "Beginner - new to investing",
-            "Intermediate - some experience",
-            "Advanced - very experienced"
+            "10+ years",                      // high risk
+            "5-10 years",
+            "2-5 years",
+            "Less than 2 years"              // low risk
         ]
     }
 ];

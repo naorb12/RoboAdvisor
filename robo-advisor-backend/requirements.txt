@@ -1,0 +1,6 @@
+FastAPI
+uvicorn
+yfinance
+numpy
+matplotlib
+pandas
