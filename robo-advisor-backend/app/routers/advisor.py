@@ -1,6 +1,6 @@
 from fastapi import APIRouter, HTTPException
-from pydantic import BaseModel
-from services.investment_advisor import ask_question, get_risk_profile
+from app.services.investment_advisor import get_risk_profile
+from pydantic import BaseModel  
 
 router = APIRouter()
 
@@ -16,3 +16,4 @@ async def calculate_risk_profile(request: RiskProfileRequest):
     profile = get_risk_profile(total_score)
     
     return {"risk_profile": profile}
+

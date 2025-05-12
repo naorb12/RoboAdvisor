@@ -1,6 +1,7 @@
 from fastapi import APIRouter
 from app.services.markovitz_standard import portfolio_optimization
 import pandas as pd
+from pydantic import BaseModel
 
 router = APIRouter()
 

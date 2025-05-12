@@ -1,19 +1,16 @@
-from fastapi import APIRouter, HTTPException
 import yfinance as yf
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 
-router = APIRouter()
 
 selected = ["SPY", "QQQ", "IEI", "LQD", "TA35.TA", "GLD", "BTC-USD", "DBO", "IWM"]
 start_year = '2020-12-01'
 end_year = '2025-01-07'
 Num_porSimulation = 200000
 
-@router.get("/portfolio-optimization")
 def portfolio_optimization(risk_profile: str):
-    frame = yf.download(selected, start=start_year, end=end_year)['Adj Close']
+    frame = yf.download(selected, start=start_year, end=end_year, auto_adjust=False)['Adj Close']
     df = pd.DataFrame(frame).ffill().bfill()
 
     returns_daily = df.pct_change()

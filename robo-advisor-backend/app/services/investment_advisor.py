@@ -1,13 +1,4 @@
-from fastapi import APIRouter, HTTPException
-from pydantic import BaseModel
 
-router = APIRouter()
-
-class RiskProfileRequest(BaseModel):
-    answers: list[int]
-
-class RiskProfileResponse(BaseModel):
-    risk_profile: str
 
 def get_risk_profile(score):
     if score < 4:
