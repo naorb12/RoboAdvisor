@@ -2,23 +2,21 @@ import { useState } from 'react';
 import './QuizPage.css';
 import { quizQuestions } from '../../Data/quizQuestions';
 import { QuestionCard } from '../../Components/QuestionCard/QuestionCard';
-import { ProposalPage } from '../ProposalPage/ProposalPage';
 import { useNavigate } from 'react-router-dom';
 
 export const QuizPage = () => {
     const [currentIndex, setCurrentIndex] = useState(0);
-    const [answers, setAnswers] = useState<(string | number | null)[]>(
+    const [selectedIndexes, setSelectedIndexes] = useState<(number | null)[]>(
         Array(quizQuestions.length).fill(null)
     );
-    const [showProposal, setShowProposal] = useState(false);
-
-    const currentQuestion = quizQuestions[currentIndex];
     const navigate = useNavigate();
 
-    const handleAnswer = (value: string | number) => {
-        const newAnswers = [...answers];
-        newAnswers[currentIndex] = value;
-        setAnswers(newAnswers);
+    const currentQuestion = quizQuestions[currentIndex];
+
+    const handleAnswer = (selectedIndex: number) => {
+        const updatedAnswers = [...selectedIndexes];
+        updatedAnswers[currentIndex] = selectedIndex;
+        setSelectedIndexes(updatedAnswers);
     };
 
     const handleNext = () => {
@@ -33,24 +31,43 @@ export const QuizPage = () => {
         }
     };
 
-    const handleGenerate = () => {
-        navigate('/proposal');
-    };
+    const handleGenerate = async () => {
+        if (selectedIndexes.includes(null)) {
+            alert("Please answer all questions before submitting.");
+            return;
+        }
 
-    if (showProposal) {
-        return (
-            <div className="quiz-page">
-                {<ProposalPage />}
-
-            </div>
+        const scores = selectedIndexes.map((selectedIndex, i) =>
+            quizQuestions[i].scores[selectedIndex as number]
         );
-    }
+
+        try {
+            const response = await fetch("http://localhost:8000/risk-profile", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({ answers: scores })
+            });
+
+            if (!response.ok) {
+                throw new Error("Failed to fetch risk profile");
+            }
+
+            const data = await response.json();
+            navigate("/proposal", { state: { proposal: data } });
+
+        } catch (error) {
+            console.error("Error sending answers:", error);
+            alert("Something went wrong while generating the proposal.");
+        }
+    };
 
     return (
         <div className="quiz-page">
             <QuestionCard
                 question={currentQuestion}
-                answer={answers[currentIndex]}
+                answer={selectedIndexes[currentIndex]}
                 onAnswer={handleAnswer}
             />
 
@@ -62,14 +79,14 @@ export const QuizPage = () => {
                 {currentIndex < quizQuestions.length - 1 ? (
                     <button
                         onClick={handleNext}
-                        disabled={answers[currentIndex] === null}
+                        disabled={selectedIndexes[currentIndex] === null}
                     >
                         Next
                     </button>
                 ) : (
                     <button
                         onClick={handleGenerate}
-                        disabled={answers[currentIndex] === null}
+                        disabled={selectedIndexes[currentIndex] === null}
                     >
                         Generate Proposal
                     </button>

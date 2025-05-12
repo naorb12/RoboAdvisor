@@ -4,51 +4,56 @@ export const quizQuestions: QuizQuestion[] = [
     {
         id: 1,
         question: "What is your age?",
-        inputType: "slider",
-        min: 18,
-        max: 100,
-        step: 1
+        options: [
+            "Under 30",
+            "30–50",
+            "50–67",
+            "Over 67"
+        ],
+        scores: [3, 2, 1, 0]
     },
     {
         id: 2,
-        question: "How long do you plan to keep your money invested?",
-        inputType: "multiple-choice",
+        question: "How would you react if your portfolio dropped from $1,000,000 to $800,000?",
         options: [
-            "Less than 3 years",
-            "3–5 years",
-            "5–10 years",
-            "More than 10 years"
-        ]
+            "Buy more (it's an opportunity)",
+            "Hold and wait",
+            "Sell a part to reduce losses",
+            "Sell everything"
+        ],
+        scores: [3, 2, 1, 0]
     },
     {
         id: 3,
-        question: "How would you react if your portfolio lost 20% of its value in a month?",
-        inputType: "multiple-choice",
+        question: "What is your primary goal?",
         options: [
-            "I would sell everything immediately",
-            "I would be concerned but wait it out",
-            "I would see it as an opportunity to invest more"
-        ]
+            "Capital growth (long term)",
+            "Balanced growth and income",
+            "Stable income",
+            "Capital preservation"
+        ],
+        scores: [3, 2, 1, 0]
     },
     {
         id: 4,
-        question: "What is your annual income?",
-        inputType: "multiple-choice",
+        question: "How experienced are you with investing?",
         options: [
-            "Less than $50,000",
-            "$50,000–$100,000",
-            "$100,000–$200,000",
-            "More than $200,000"
-        ]
+            "Very experienced",
+            "Somewhat experienced",
+            "Basic knowledge",
+            "No experience"
+        ],
+        scores: [3, 2, 1, 0]
     },
     {
         id: 5,
-        question: "How would you rate your investment experience?",
-        inputType: "multiple-choice",
+        question: "How long do you plan to keep your investments?",
         options: [
-            "Beginner - new to investing",
-            "Intermediate - some experience",
-            "Advanced - very experienced"
-        ]
+            "10+ years",
+            "5–10 years",
+            "2–5 years",
+            "Less than 2 years"
+        ],
+        scores: [3, 2, 1, 0]
     }
 ];
