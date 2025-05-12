@@ -1,5 +1,5 @@
 import React from 'react';
-import logo from './logo.svg';
+//import logo from './logo.svg';
 import './App.css';
 import { QuizPage } from './Pages/QuizPage/QuizPage';
 import { Navigate, Route, Routes, BrowserRouter } from 'react-router-dom';
