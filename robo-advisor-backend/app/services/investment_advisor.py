@@ -1,3 +1,4 @@
+from fastapi import APIRouter, HTTPException
 
 
 def get_risk_profile(score):
@@ -5,8 +6,10 @@ def get_risk_profile(score):
         return "Conservative"
     elif score < 12:
         return "Moderate"
-    else:
+    elif score < 16:
         return "Aggressive"
+    else:
+        raise HTTPException(status_code=400, detail="Invalid score for risk profile.")
 
 # @router.post("/risk-profile", response_model=RiskProfileResponse)
 # def calculate_risk_profile(request: RiskProfileRequest):
