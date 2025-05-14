@@ -10,7 +10,8 @@ export const quizQuestions: QuizQuestion[] = [
             "30-50",
             "50-67",
             "Over 67"            // low risk tolerance
-        ]
+        ],
+        scores: [3, 2, 1, 0] // Example scores corresponding to options
     },
     {
         id: 2,
@@ -22,6 +23,7 @@ export const quizQuestions: QuizQuestion[] = [
             "Sell a part to reduce losses",
             "Sell everything"                  // low risk
         ],
+        scores: [3, 2, 1, 0] // Example scores corresponding to options
     },
     {
         id: 3,
@@ -32,7 +34,8 @@ export const quizQuestions: QuizQuestion[] = [
             "Balanced growth and income",
             "Stable income", //REMOVE!
             "Capital preservation"            // low risk
-        ]
+        ],
+        scores: [3, 2, 1, 0] // Example scores corresponding to options
     },
     {
         id: 4,
@@ -43,7 +46,8 @@ export const quizQuestions: QuizQuestion[] = [
             "Somewhat experienced",
             "Basic knowledge",
             "No experience"                   // low risk
-        ]
+        ],
+        scores: [3, 2, 1, 0] // Example scores corresponding to options
     },
     {
         id: 5,
@@ -53,7 +57,7 @@ export const quizQuestions: QuizQuestion[] = [
             "10+ years",                      // high risk
             "5-10 years",
             "2-5 years",
-            "Less than 2 years"              // low risk
-        ]
+        ],
+        scores: [3, 2, 1, 0] // Example scores corresponding to options
     }
 ];

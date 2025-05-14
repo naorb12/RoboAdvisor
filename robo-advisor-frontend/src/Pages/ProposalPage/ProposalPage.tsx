@@ -1,24 +1,45 @@
+import { useLocation } from 'react-router-dom';
 import { ProposalCard } from '../../Components/ProposalCard/ProposalCard';
 import './ProposalPage.css';
 
-const mockProposal = {
-    title: "Moderate Growth Portfolio",
-    description: "A balanced mix of stocks and bonds suitable for medium-term investors with moderate risk tolerance.",
-    riskLevel: "Moderate",
-    suggestedAllocation: [
-        { asset: "US Stocks", percentage: 40 },
-        { asset: "International Stocks", percentage: 20 },
-        { asset: "Bonds", percentage: 30 },
-        { asset: "Cash", percentage: 10 }
-    ]
-};
-
 export const ProposalPage = () => {
+    const location = useLocation();
+    // const proposal = location.state?.proposal;
+
+    const mockProposal = {
+        title: "Max Sharpe Portfolio",
+        description: "Balanced risk-return optimized via Markowitz model.",
+        riskLevel: "Moderate",
+        returns: 11.91,
+        volatility: 10.09,
+        sharpeRatio: 1.18,
+        suggestedAllocation: [
+            { asset: "SPY", percentage: 13.8 },
+            { asset: "QQQ", percentage: 1.31 },
+            { asset: "IEI", percentage: 18.2 },
+            { asset: "LQD", percentage: 0.97 },
+            { asset: "TA35.TA", percentage: 19.51 },
+            { asset: "GLD", percentage: 0.12 },
+            { asset: "BTC-USD", percentage: 13.39 },
+            { asset: "DBO", percentage: 14.61 },
+            { asset: "IWM", percentage: 15.45 },
+            { asset: "GSG", percentage: 2.78 }
+        ]
+    };
+    const proposal = mockProposal;
+
+    if (!proposal) {
+        return (
+            <div className="proposal-page">
+                <h2>No proposal data received.</h2>
+            </div>
+        );
+    }
+
     return (
         <div className="proposal-page">
             <h2>Suggested Investment Plan</h2>
-            <ProposalCard proposal={mockProposal} />
+            <ProposalCard proposal={proposal} />
         </div>
     );
 };
-
