@@ -42,7 +42,7 @@ export const QuizPage = () => {
         );
 
         try {
-            const response = await fetch("http://localhost:8000/risk-profile", {
+            const response = await fetch("http://0.0.0.0:8000/risk-profile", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
