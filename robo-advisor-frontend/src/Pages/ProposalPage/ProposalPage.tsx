@@ -17,27 +17,11 @@ export const ProposalPage = () => {
         return null;
     }
 
-    // Transform the data into the format expected by ProposalCard
-    const portfolioData = proposal.portfolio.max_sharpe_portfolio[0]; // Assuming "max_sharpe_portfolio" is the key
-    const transformedProposal = {
-        title: "Max Sharpe Portfolio",
-        description: "Balanced risk-return optimized via Markowitz model.",
-        riskLevel: proposal.risk_profile,
-        returns: portfolioData["Returns"],
-        volatility: portfolioData["Volatility"],
-        sharpeRatio: portfolioData["Sharpe Ratio"],
-        suggestedAllocation: Object.keys(portfolioData)
-            .filter((key) => key.endsWith("Weight"))
-            .map((key) => ({
-                asset: key.replace(" Weight", ""),
-                percentage: parseFloat((portfolioData[key] * 100).toFixed(2)), // Convert weight to percentage as a number
-            })),
-    };
-
+    
     return (
         <div className="proposal-page">
             <h1>Your Investment Proposal</h1>
-            <ProposalCard proposal={transformedProposal} />
+            <ProposalCard proposal={proposal} />
         </div>
     );
 };
