@@ -1,3 +1,4 @@
+import React from 'react';
 import { useState } from 'react';
 import './QuizPage.css';
 import { quizQuestions } from '../../Data/quizQuestions';
@@ -42,7 +43,7 @@ export const QuizPage = () => {
         );
 
         try {
-            const response = await fetch("http://0.0.0.0:8000/risk-profile", {
+            const response = await fetch("http://127.0.0.1:8000/risk-profile", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"

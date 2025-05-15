@@ -1,45 +1,43 @@
-import { useLocation } from 'react-router-dom';
+import React from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { ProposalCard } from '../../Components/ProposalCard/ProposalCard';
 import './ProposalPage.css';
 
 export const ProposalPage = () => {
     const location = useLocation();
-    // const proposal = location.state?.proposal;
+    const navigate = useNavigate();
 
-    const mockProposal = {
-        title: "Max Sharpe Portfolio",
-        description: "Balanced risk-return optimized via Markowitz model.",
-        riskLevel: "Moderate",
-        returns: 11.91,
-        volatility: 10.09,
-        sharpeRatio: 1.18,
-        suggestedAllocation: [
-            { asset: "SPY", percentage: 13.8 },
-            { asset: "QQQ", percentage: 1.31 },
-            { asset: "IEI", percentage: 18.2 },
-            { asset: "LQD", percentage: 0.97 },
-            { asset: "TA35.TA", percentage: 19.51 },
-            { asset: "GLD", percentage: 0.12 },
-            { asset: "BTC-USD", percentage: 13.39 },
-            { asset: "DBO", percentage: 14.61 },
-            { asset: "IWM", percentage: 15.45 },
-            { asset: "GSG", percentage: 2.78 }
-        ]
-    };
-    const proposal = mockProposal;
+    // Access the data passed via state
+    const { proposal } = location.state || {};
 
     if (!proposal) {
-        return (
-            <div className="proposal-page">
-                <h2>No proposal data received.</h2>
-            </div>
-        );
+        // If no data is passed, redirect back to the quiz page
+        console.error("No proposal data found. Redirecting to /quiz.");
+        navigate("/quiz");
+        return null;
     }
+
+    // Transform the data into the format expected by ProposalCard
+    const portfolioData = proposal.portfolio.max_sharpe_portfolio[0]; // Assuming "max_sharpe_portfolio" is the key
+    const transformedProposal = {
+        title: "Max Sharpe Portfolio",
+        description: "Balanced risk-return optimized via Markowitz model.",
+        riskLevel: proposal.risk_profile,
+        returns: portfolioData["Returns"],
+        volatility: portfolioData["Volatility"],
+        sharpeRatio: portfolioData["Sharpe Ratio"],
+        suggestedAllocation: Object.keys(portfolioData)
+            .filter((key) => key.endsWith("Weight"))
+            .map((key) => ({
+                asset: key.replace(" Weight", ""),
+                percentage: parseFloat((portfolioData[key] * 100).toFixed(2)), // Convert weight to percentage as a number
+            })),
+    };
 
     return (
         <div className="proposal-page">
-            <h2>Suggested Investment Plan</h2>
-            <ProposalCard proposal={proposal} />
+            <h1>Your Investment Proposal</h1>
+            <ProposalCard proposal={transformedProposal} />
         </div>
     );
 };

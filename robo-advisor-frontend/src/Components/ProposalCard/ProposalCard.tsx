@@ -1,3 +1,4 @@
+import React from 'react';
 import './ProposalCard.css';
 import { Props, Proposal, Allocation } from '../../types/proposal.types';
 import { Cell, Legend, Pie, PieChart, ResponsiveContainer, Tooltip } from 'recharts';

@@ -1,3 +1,5 @@
+import React from 'react';
+import { useState } from 'react'
 import './QuestionCard.css';
 import { QuizQuestion } from '../../types/quiz.types';
 
