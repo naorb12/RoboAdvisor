@@ -2,72 +2,70 @@ from fastapi import HTTPException
 import yfinance as yf
 import numpy as np
 import pandas as pd
-import matplotlib.pyplot as plt
 
+# מתוך הקובץ שלך
+TICKERS         = ["SPY", "QQQ", "IEI", "LQD", "GLD", "VNQ"]
+START_DATE      = "2020-01-01"
+END_DATE        = "2024-11-28"
+NUM_PORTFOLIOS  = 10_000
+TRADING_DAYS    = 252
+RISK_FREE_RATE  = 0.015
 
-selected = ["SPY", "QQQ", "IEI", "LQD", "TA35.TA", "GLD", "BTC-USD", "DBO", "IWM"]
-start_year = '2020-12-01'
-end_year = '2025-01-07'
-Num_porSimulation = 200000
+def annualised_return_and_cov(df: pd.DataFrame):
+    returns_daily = df.pct_change().dropna(how="any")           
+    mu_annual = (1 + returns_daily.mean()) ** TRADING_DAYS - 1
+    sigma_annual = returns_daily.cov() * TRADING_DAYS
+    return mu_annual, sigma_annual
+
+def run_markowitz(plot: bool = False,
+                  tickers: list[str] = TICKERS,
+                  start: str = START_DATE,
+                  end: str = END_DATE,
+                  n: int = NUM_PORTFOLIOS,
+                  risk_free: float = RISK_FREE_RATE
+                  ) -> tuple[pd.DataFrame, np.ndarray, list[str]]:
+
+    prices = yf.download(tickers, start=start, end=end, auto_adjust=True)["Close"]
+    mu, sigma = annualised_return_and_cov(prices)
+
+    num_assets = len(tickers)
+    results = np.zeros((n, 3))
+    all_weights = np.zeros((n, num_assets))
+
+    for i in range(n):
+        w = np.random.random(num_assets)
+        w /= w.sum()
+        all_weights[i] = w
+
+        ret = np.dot(w, mu)
+        vol = np.sqrt(np.dot(w.T, np.dot(sigma, w)))
+        sharpe = (ret - risk_free) / vol
+
+        results[i] = [ret, vol, sharpe]
+
+    df = pd.DataFrame(results, columns=["Return", "Volatility", "Sharpe"])
+    return df, all_weights, tickers
 
 def portfolio_optimization(risk_profile: str):
-    frame = yf.download(selected, start=start_year, end=end_year)['Close']
-    df = pd.DataFrame(frame).ffill().bfill()
+    df, all_weights, tickers = run_markowitz()
+    df["Return"] = (df["Return"] * 100).round(2)
+    df["Volatility"] = (df["Volatility"] * 100).round(2)
 
-    returns_daily = df.pct_change()
-    returns_annual = ((1 + returns_daily.mean()) ** 250) - 1
-    std_daily = returns_daily.std()
-    std_annual = std_daily * (250 ** 0.5)
-    Sharp = (returns_annual - 0.04) / std_annual
-    cov_daily = returns_daily.cov()
-    cov_annual = cov_daily * 250
 
-    port_returns = []
-    port_volatility = []
-    sharpe_ratio = []
-    stock_weights = []
+    for i, symbol in enumerate(tickers):
+        df[symbol + " Weight"] = [w[i] for w in all_weights]
 
-    num_assets = len(selected)
-    np.random.seed(101)
 
-    for _ in range(Num_porSimulation):
-        weights = np.random.random(num_assets)
-        weights /= np.sum(weights)
-        returns = np.dot(weights, returns_annual)
-        volatility = np.sqrt(np.dot(weights.T, np.dot(cov_annual, weights)))
-        sharpe = returns / volatility
 
-        sharpe_ratio.append(sharpe)
-        port_returns.append(returns * 100)
-        port_volatility.append(volatility * 100)
-        stock_weights.append(weights)
+    min_vol_idx = df["Volatility"].idxmin()
+    max_sharpe_idx = df["Sharpe"].idxmax()
+    max_return_idx = df["Return"].idxmax()
 
-    portfolio = {
-        'Returns': port_returns,
-        'Volatility': port_volatility,
-        'Sharpe Ratio': sharpe_ratio
-    }
-
-    for counter, symbol in enumerate(selected):
-        portfolio[symbol + ' Weight'] = [Weight[counter] for Weight in stock_weights]
-
-    df = pd.DataFrame(portfolio)
-
-    min_volatility = df['Volatility'].min()
-    max_sharpe = df['Sharpe Ratio'].max()
-    max_return = df['Returns'].max()
-    max_vol = df['Volatility'].max()
-
-    sharpe_portfolio = df.loc[df['Sharpe Ratio'] == max_sharpe]
-    min_variance_port = df.loc[df['Volatility'] == min_volatility]
-    max_returns = df.loc[df['Returns'] == max_return]
-    max_vols = df.loc[df['Volatility'] == max_vol]
-
-    if(risk_profile == "Conservative"):
-        return {"safest_portfolio": min_variance_port.to_dict(orient='records')}
-    elif(risk_profile == "Moderate"):
-        return {"max_sharpe_portfolio": sharpe_portfolio.to_dict(orient='records')}
-    elif(risk_profile == "Aggressive"):
-        return {"max_returns_portfolio": max_returns.to_dict(orient='records')}
+    if risk_profile == "Conservative":
+        return {"safest_portfolio": df.loc[[min_vol_idx]].rename(columns={"Return": "Returns"}).to_dict(orient="records")}
+    elif risk_profile == "Moderate":
+        return {"max_sharpe_portfolio": df.loc[[max_sharpe_idx]].rename(columns={"Return": "Returns"}).to_dict(orient="records")}
+    elif risk_profile == "Aggressive":
+        return {"max_returns_portfolio": df.loc[[max_return_idx]].rename(columns={"Return": "Returns"}).to_dict(orient="records")}
     else:
         raise HTTPException(status_code=400, detail="Invalid risk profile. Choose Conservative, Moderate, or Aggressive.")
