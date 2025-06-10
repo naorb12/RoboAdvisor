@@ -1,0 +1,131 @@
+/* Card Container */
+.proposal-card {
+    background-color: #2a2a2a;
+    padding: 24px;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.6);
+    font-size: 1.1rem;
+    max-width: 900px; /* Increased from 600px */
+    width: 100%;
+    color: #d3d3d3;
+    margin: 0 auto;
+}
+
+/* Headline */
+.proposal-card h3 {
+    color: #cb9a06;
+    font-size: 1.5rem;
+    margin-bottom: 12px;
+}
+
+/* Section Labels */
+.risk-level {
+    color: #cb9a06;
+    margin-bottom: 10px;
+    font-size: 1.1rem;
+}
+
+.proposal-card p {
+    margin-bottom: 10px;
+    line-height: 1.5;
+}
+
+/* Asset Allocation List */
+.proposal-card ul {
+    list-style: none;
+    padding-left: 0;
+    margin-top: 12px;
+}
+
+.proposal-card li {
+    padding: 10px;
+    margin: 6px 0;
+    background-color: #383838;
+    border-radius: 6px;
+    transition: background-color 0.2s ease;
+}
+
+.proposal-card li:hover {
+    background-color: #4d4d4d;
+}
+
+/* Chart Area */
+.chart-container {
+    background-color: #1e1e1e;
+    border-radius: 12px;
+    padding: 20px;
+    margin: 20px 0;
+    box-shadow: 0 0 10px rgba(203, 154, 6, 0.15);
+    max-width: 400px;
+    width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+    min-width: 270px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* Legend Container */
+.pie-legend {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 16px;
+}
+
+/* Individual Legend Item */
+.pie-legend div {
+    display: flex;
+    align-items: center;
+    background-color: #333;
+    padding: 4px 8px;
+    border-radius: 8px;
+    color: #ffffff;
+    font-size: 0.9rem;
+    transition: all 0.2s ease;
+}
+
+.pie-legend div:hover {
+    transform: scale(1.05);
+    background-color: #444;
+}
+
+/* Color Dot in Legend */
+.pie-legend div>div {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    margin-right: 6px;
+}
+
+/* Proposal Flex Container */
+.proposal-flex {
+    display: flex;
+    flex-direction: row;
+    gap: 32px;
+    align-items: flex-start;
+}
+
+/* Proposal Info */
+.proposal-info {
+    flex: 1;
+    min-width: 220px;
+}
+
+/* Responsive Tweaks */
+@media (max-width: 480px) {
+    .proposal-card {
+        font-size: 1rem;
+        padding: 16px;
+    }
+
+    .chart-container {
+        max-width: 300px;
+    }
+
+    .proposal-card h3 {
+        font-size: 1.3rem;
+    }
+}
