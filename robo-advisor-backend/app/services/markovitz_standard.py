@@ -2,18 +2,18 @@ from fastapi import HTTPException
 import yfinance as yf
 import numpy as np
 import pandas as pd
+from datetime import date
 
-# מתוך הקובץ שלך
 TICKERS         = ["SPY", "QQQ", "IEI", "LQD", "GLD", "VNQ"]
 START_DATE      = "2020-01-01"
-END_DATE        = "2024-11-28"
+END_DATE        = date.today().isoformat() # Automatically set to today's date
 NUM_PORTFOLIOS  = 10_000
 TRADING_DAYS    = 252
-RISK_FREE_RATE  = 0.015
+RISK_FREE_RATE  = 0.025
 
 def annualised_return_and_cov(df: pd.DataFrame):
     returns_daily = df.pct_change().dropna(how="any")           
-    mu_annual = (1 + returns_daily.mean()) ** TRADING_DAYS - 1
+    mu_annual = (returns_daily + 1).prod() ** (TRADING_DAYS / len(returns_daily)) - 1
     sigma_annual = returns_daily.cov() * TRADING_DAYS
     return mu_annual, sigma_annual
 
