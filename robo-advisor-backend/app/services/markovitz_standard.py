@@ -3,6 +3,8 @@ import yfinance as yf
 import numpy as np
 import pandas as pd
 from datetime import date
+from app.database import SessionLocal
+from app.models import Portfolio
 
 
 TICKERS         = ["SPY", "QQQ", "IEI", "LQD", "GLD", "VNQ"]
@@ -47,6 +49,73 @@ def run_markowitz(plot: bool = False,
     df = pd.DataFrame(results, columns=["Return", "Volatility", "Sharpe"])
     return df, all_weights, tickers
 
+
+def build_and_store_all_portfolios():
+    df, all_weights, tickers = run_markowitz()
+    df["Return"] = (df["Return"] * 100).round(2)
+    df["Volatility"] = (df["Volatility"] * 100).round(2)
+
+    for i, symbol in enumerate(tickers):
+        df[symbol + " Weight"] = [w[i] for w in all_weights]
+
+    # מציאת שלושת התיקים
+    min_vol_idx = df["Volatility"].idxmin()
+    max_sharpe_idx = df["Sharpe"].idxmax()
+    max_return_idx = df["Return"].idxmax()
+
+    selected = {
+        "conservative": df.loc[min_vol_idx],
+        "moderate": df.loc[max_sharpe_idx],
+        "aggressive": df.loc[max_return_idx]
+    }
+
+    # שמירה לדאטאבייס
+    db = SessionLocal()
+    try:
+        # 🧹 מחיקת כל התיקים הקודמים
+        db.query(Portfolio).delete()
+
+        # יצירת התיקים החדשים
+        for risk_level, row in selected.items():
+            weights = {
+                col.replace(" Weight", ""): float(row[col])
+                for col in row.index if "Weight" in col
+            }
+            portfolio = Portfolio(
+                risk_level=risk_level,
+                returns=float(row["Return"]),
+                volatility=float(row["Volatility"]),
+                sharpe=float(row["Sharpe"]),
+                weights=weights
+            )
+            db.add(portfolio)
+
+        db.commit()
+    finally:
+        db.close()
+
+    # החזרה כ־dict
+    return {
+        level: {
+            "Returns": row["Return"],
+            "Volatility": row["Volatility"],
+            "Sharpe": row["Sharpe"],
+            "Weights": {
+                col.replace(" Weight", ""): row[col]
+                for col in row.index if "Weight" in col
+            }
+        }
+        for level, row in selected.items()
+    }
+
+
+# להרצה עצמאית
+if __name__ == "__main__":
+    result = build_and_store_all_portfolios()
+    print("✅ Portfolios saved to DB")
+    print(result)
+
+ # NO LONGER  USED
 def portfolio_optimization(risk_profile: str):
     df, all_weights, tickers = run_markowitz()
     df["Return"] = (df["Return"] * 100).round(2)
