@@ -37,3 +37,7 @@
     background-color: #e6b800;
     color: #181818;
 }
+
+.home-button {
+    cursor: pointer;
+}

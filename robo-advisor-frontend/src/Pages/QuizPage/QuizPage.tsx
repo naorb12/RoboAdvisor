@@ -11,6 +11,7 @@ export const QuizPage = () => {
     const [selectedIndexes, setSelectedIndexes] = useState<(number | null)[]>(
         Array(quizQuestions.length).fill(null)
     );
+    const [resetKey, setResetKey] = useState(0); 
     const navigate = useNavigate();
 
     const currentQuestion = quizQuestions[currentIndex];
