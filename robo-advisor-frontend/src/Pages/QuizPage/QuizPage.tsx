@@ -43,12 +43,24 @@ export const QuizPage = () => {
         );
 
         try {
+            const rawUserId = localStorage.getItem("userId");
+            console.log("Raw user ID:", rawUserId);  // 👈 זה חשוב
+            const userId = parseInt(rawUserId!);
+            console.log("Parsed user ID:", userId);
+
+            const payload = {
+            answers: scores,
+            user_id: userId
+            };
+            console.log("Payload:", payload);
+
             const response = await fetch("http://127.0.0.1:8000/risk-profile", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
                 },
-                body: JSON.stringify({ answers: scores })
+                body: JSON.stringify({ answers: scores , user_id: parseInt(localStorage.getItem("userId")!) })
+                
             });
 
             if (!response.ok) {

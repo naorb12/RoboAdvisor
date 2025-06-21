@@ -15,9 +15,14 @@ export const LoginPage = () => {
             body: JSON.stringify({ username, email, password }),
         });
         if (response.ok) {
+            const data = await response.json();
+            localStorage.setItem("userId", data.user_id);
+            console.log("User Id:", data.user_id)
             navigate('/quiz', { replace: true });
         } else {
-            setError('Invalid credentials');
+            const data = await response.json();
+            setError(data.detail || 'Login failed');
+            console.error(data);
         }
     };
 

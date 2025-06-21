@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from app.routers import markovitz, advisor
+from app.routers import markovitz, advisor, user
 from app.database import Base, engine
 from app.models import Portfolio, User
 from app.services.markovitz_standard import build_and_store_all_portfolios
@@ -18,6 +18,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+app.include_router(user.router)
 app.include_router(markovitz.router)
 app.include_router(advisor.router)
 

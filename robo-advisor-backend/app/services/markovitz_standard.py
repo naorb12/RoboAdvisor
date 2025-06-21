@@ -72,8 +72,9 @@ def build_and_store_all_portfolios():
     # שמירה לדאטאבייס
     db = SessionLocal()
     try:
-        # 🧹 מחיקת כל התיקים הקודמים
-        db.query(Portfolio).delete()
+        # סמן את כל התיקים הקודמים כלא רלוונטיים
+        db.query(Portfolio).update({Portfolio.relevance: "obsolete"})
+        db.commit() 
 
         # יצירת התיקים החדשים
         for risk_level, row in selected.items():
@@ -86,7 +87,9 @@ def build_and_store_all_portfolios():
                 returns=float(row["Return"]),
                 volatility=float(row["Volatility"]),
                 sharpe=float(row["Sharpe"]),
-                weights=weights
+                weights=weights,
+                date=date.today(),
+                relevance="current"
             )
             db.add(portfolio)
 

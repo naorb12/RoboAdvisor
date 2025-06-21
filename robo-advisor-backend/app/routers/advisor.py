@@ -1,5 +1,5 @@
 from fastapi import APIRouter, HTTPException
-from app.services.investment_advisor import get_risk_profile
+from app.services.investment_advisor import get_risk_profile, associate_portfolio_to_user
 from app.services.markovitz_standard import portfolio_optimization
 from pydantic import BaseModel  
 from fastapi import Depends
@@ -12,9 +12,12 @@ router = APIRouter()
 
 class RiskProfileRequest(BaseModel):
     answers: list[int]
+    user_id: int
 
 @router.post("/risk-profile")
 async def calculate_risk_profile(request: RiskProfileRequest, db: Session = Depends(get_db)):
+    print("BEFORE FOUND PORTFOLIO")
+
     if len(request.answers) != 5:
         raise HTTPException(status_code=400, detail="Exactly 5 answers are required.")
     for answer in request.answers:
@@ -24,11 +27,9 @@ async def calculate_risk_profile(request: RiskProfileRequest, db: Session = Depe
     total_score = sum(request.answers)
     profile = get_risk_profile(total_score)
     risk_level = profile.lower()
-
-    portfolio = db.query(Portfolio).filter(Portfolio.risk_level == risk_level).first()
+    portfolio = db.query(Portfolio).filter(Portfolio.risk_level == risk_level, Portfolio.relevance == "current").first()
     if not portfolio:
         raise HTTPException(status_code=404, detail="Portfolio not found in database.")
-
     portfolio_data = {
         "Returns": portfolio.returns,
         "Volatility": portfolio.volatility,
@@ -41,6 +42,8 @@ async def calculate_risk_profile(request: RiskProfileRequest, db: Session = Depe
         "moderate": "max_sharpe_portfolio",
         "aggressive": "max_returns_portfolio"
     }
+    print("TRYING TO ASSOCIATE PORTFOLIO TO USER")
+    associate_portfolio_to_user(request.user_id, risk_level, portfolio.id)
 
     return {
         "risk_profile": profile,
