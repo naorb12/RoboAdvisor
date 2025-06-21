@@ -1,6 +1,6 @@
 from fastapi import APIRouter, HTTPException
 from app.services.investment_advisor import get_risk_profile, associate_portfolio_to_user
-from app.services.markovitz_standard import portfolio_optimization
+from app.core.markovitz_standard import portfolio_optimization
 from pydantic import BaseModel  
 from fastapi import Depends
 from sqlalchemy.orm import Session
@@ -15,8 +15,7 @@ class RiskProfileRequest(BaseModel):
     user_id: int
 
 @router.post("/risk-profile")
-async def calculate_risk_profile(request: RiskProfileRequest, db: Session = Depends(get_db)):
-    print("BEFORE FOUND PORTFOLIO")
+async def calculate_risk_profile_and_return_portfolio(request: RiskProfileRequest, db: Session = Depends(get_db)):
 
     if len(request.answers) != 5:
         raise HTTPException(status_code=400, detail="Exactly 5 answers are required.")
@@ -42,7 +41,8 @@ async def calculate_risk_profile(request: RiskProfileRequest, db: Session = Depe
         "moderate": "max_sharpe_portfolio",
         "aggressive": "max_returns_portfolio"
     }
-    print("TRYING TO ASSOCIATE PORTFOLIO TO USER")
+
+    # associate in DB
     associate_portfolio_to_user(request.user_id, risk_level, portfolio.id)
 
     return {

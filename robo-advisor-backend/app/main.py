@@ -1,9 +1,10 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from app.routers import markovitz, advisor, user
+from app.routers import advisor, user
 from app.database import Base, engine
 from app.models import Portfolio, User
-from app.services.markovitz_standard import build_and_store_all_portfolios
+from app.core.markovitz_standard import build_and_store_all_portfolios
+from app.services.portfolio_service import save_portfolios_to_db
 
 # יצירת טבלאות מהמודלים
 Base.metadata.create_all(bind=engine)
@@ -19,7 +20,6 @@ app.add_middleware(
 )
 
 app.include_router(user.router)
-app.include_router(markovitz.router)
 app.include_router(advisor.router)
 
 @app.get("/")
@@ -28,4 +28,5 @@ def read_root():
 
 @app.on_event("startup")
 def generate_portfolios():
-    build_and_store_all_portfolios()
+    portfolios = build_and_store_all_portfolios()
+    save_portfolios_to_db(portfolios)

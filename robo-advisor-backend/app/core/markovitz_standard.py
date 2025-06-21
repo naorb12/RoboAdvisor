@@ -69,34 +69,6 @@ def build_and_store_all_portfolios():
         "aggressive": df.loc[max_return_idx]
     }
 
-    # שמירה לדאטאבייס
-    db = SessionLocal()
-    try:
-        # סמן את כל התיקים הקודמים כלא רלוונטיים
-        db.query(Portfolio).update({Portfolio.relevance: "obsolete"})
-        db.commit() 
-
-        # יצירת התיקים החדשים
-        for risk_level, row in selected.items():
-            weights = {
-                col.replace(" Weight", ""): float(row[col])
-                for col in row.index if "Weight" in col
-            }
-            portfolio = Portfolio(
-                risk_level=risk_level,
-                returns=float(row["Return"]),
-                volatility=float(row["Volatility"]),
-                sharpe=float(row["Sharpe"]),
-                weights=weights,
-                date=date.today(),
-                relevance="current"
-            )
-            db.add(portfolio)
-
-        db.commit()
-    finally:
-        db.close()
-
     # החזרה כ־dict
     return {
         level: {
