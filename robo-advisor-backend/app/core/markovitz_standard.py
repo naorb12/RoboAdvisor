@@ -84,12 +84,6 @@ def build_and_store_all_portfolios():
     }
 
 
-# להרצה עצמאית
-if __name__ == "__main__":
-    result = build_and_store_all_portfolios()
-    print("✅ Portfolios saved to DB")
-    print(result)
-
  # NO LONGER  USED
 def portfolio_optimization(risk_profile: str):
     df, all_weights, tickers = run_markowitz()
