@@ -3,6 +3,9 @@ from app.models import Portfolio, User
 from datetime import date
 import smtplib
 from email.mime.text import MIMEText
+import os
+
+EMAIL_PASSWORD = os.getenv("EMAIL_PASSWORD")
 
 def save_portfolios_to_db(portfolios: dict):
     db = SessionLocal()
@@ -48,7 +51,7 @@ def notify_users_if_needed(portfolios: dict):
 
 def send_email(recipient_email: str, old_returns: str, new_returns: str):
     sender_email = "roboadvisor.notifications@gmail.com"
-    sender_password = "uerv vyas gdhm rhjw"
+    sender_password = "EMAIL_PASSWORD"
 
     body = f"Hello! The portfolio we offered is great, but we got a new one for you with higher return value: {new_returns} instead of your previous {old_returns}."
     msg = MIMEText(body)
