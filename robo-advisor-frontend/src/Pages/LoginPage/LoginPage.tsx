@@ -17,7 +17,9 @@ export const LoginPage = () => {
         if (response.ok) {
             const data = await response.json();
             localStorage.setItem("userId", data.user_id);
-            console.log("User Id:", data.user_id)
+            localStorage.setItem("username", data.username);
+            console.log("UserName:", data.username);
+            console.log("User Id:", data.user_id);
             navigate('/quiz', { replace: true });
         } else {
             const data = await response.json();
@@ -35,3 +37,4 @@ export const LoginPage = () => {
         </div>
     );
 };
+

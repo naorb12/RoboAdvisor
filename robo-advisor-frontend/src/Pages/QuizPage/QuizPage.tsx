@@ -4,6 +4,7 @@ import './QuizPage.css';
 import { quizQuestions } from '../../Data/quizQuestions';
 import { QuestionCard } from '../../Components/QuestionCard/QuestionCard';
 import { useNavigate } from 'react-router-dom';
+import { Header } from '../../Components/Structure/Header';
 
 export const QuizPage = () => {
     const [currentIndex, setCurrentIndex] = useState(0);
@@ -77,7 +78,9 @@ export const QuizPage = () => {
     };
 
     return (
+
         <div className="quiz-page">
+            <Header />
             <QuestionCard
                 question={currentQuestion}
                 answer={selectedIndexes[currentIndex]}

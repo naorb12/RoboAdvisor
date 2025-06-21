@@ -32,8 +32,7 @@ def login(request: LoginRequest, db: Session = Depends(get_db)):
         # קיים — בדוק סיסמה
         if not pwd_context.verify(request.password, user.hashed_password):
             raise HTTPException(status_code=401, detail="Password does not match for existing user")
-        return {"message": "Login successful", "user_id": user.id}
-
+        return {"message": "Login successful", "user_id": user.id, "username" : user.username}
     # בדוק אם יש מייל שכבר קיים עם שם אחר
     email_conflict = db.query(User).filter(User.email == request.email).first()
     if email_conflict:
@@ -50,7 +49,7 @@ def login(request: LoginRequest, db: Session = Depends(get_db)):
         db.add(user)
         db.commit()
         db.refresh(user)
-        return {"message": "Login successful", "user_id": user.id}
+        return {"message": "Login successful", "user_id": user.id, "username" : user.username}
 
     except Exception as e:
         db.rollback()
