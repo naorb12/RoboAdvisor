@@ -10,6 +10,7 @@ export const LoginPage = () => {
     // Redirect if already logged in
     useEffect(() => {
         const userId = localStorage.getItem("userId");
+        console.log(localStorage.getItem("email") + " " + userId);
         if (userId) {
             navigate('/quiz', { replace: true });
         }

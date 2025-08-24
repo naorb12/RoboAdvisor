@@ -21,10 +21,10 @@ def associate_portfolio_to_user(user_id: str, risk_profile: str, portfolio_id: i
         user = db.query(User).filter(User.id == user_id).first()
         user.risk_profile = risk_profile
         user.portfolio_id = portfolio_id
-        username = user.username
+        email = user.email
         db.commit()
     finally:
         db.close()
 
-    return {"message": f"Assigned portfolio to user {username}"}
+    return {"message": f"Assigned portfolio to user {email}"}
 

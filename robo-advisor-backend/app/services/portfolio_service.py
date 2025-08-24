@@ -44,14 +44,15 @@ def notify_users_if_needed(portfolios: dict):
                 if potential_portfolio and potential_portfolio.returns > old_portfolio.returns:
                     try:
                         send_email(user.email, old_portfolio.returns, potential_portfolio.returns)
+                        print("Sent email to update portfolio")
                     except Exception as e:
-                        print("Failed to send email to {user.email}: {e}")
+                        print(f"Failed to send email to {user.email}: {e}")
     finally:
         db.close()
 
 def send_email(recipient_email: str, old_returns: str, new_returns: str):
     sender_email = "roboadvisor.notifications@gmail.com"
-    sender_password = "EMAIL_PASSWORD"
+    sender_password = EMAIL_PASSWORD
 
     body = f"Hello! The portfolio we offered is great, but we got a new one for you with higher return value: {new_returns} instead of your previous {old_returns}."
     msg = MIMEText(body)

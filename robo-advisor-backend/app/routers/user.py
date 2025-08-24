@@ -24,7 +24,7 @@ class LoginRequest(BaseModel):
     password: str
 
 @router.post("/register")
-def register(request: RegisterRequest, db: Session = (get_db)):
+def register(request: RegisterRequest, db: Session = Depends(get_db)):
     print("GOT REGISTER REQUEST:", request)
     user = db.query(User).filter(
         User.email == request.email
@@ -63,5 +63,7 @@ def login(request: LoginRequest, db: Session = Depends(get_db)):
         if not pwd_context.verify(request.password, user.hashed_password):
             raise HTTPException(status_code=401, detail="Password does not match for existing user")
         return {"message": "Login successful", "user_id": user.id, "email" : user.email}
+    else:
+        raise HTTPException(status_code=401, detail="Email does not exist, please register first.")
    
 

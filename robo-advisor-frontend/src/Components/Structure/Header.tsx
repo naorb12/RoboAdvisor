@@ -9,10 +9,10 @@ type HeaderProps = {
 
 export const Header: React.FC<HeaderProps> = ({ onHomeClick, disableHomeButton = false }) => {
   const navigate = useNavigate();
-  const username = localStorage.getItem("username");
+  const email = localStorage.getItem("email");
 
   useEffect(() => {
-    if (!username) {
+    if (!email) {
       navigate("/login");
     }
   }, []);
@@ -39,12 +39,12 @@ export const Header: React.FC<HeaderProps> = ({ onHomeClick, disableHomeButton =
           }}
         />
       </button>
-      <span>Hello, {username}</span>
+      <span>Hello, {email?.slice(0, email.indexOf('@'))}</span>
       <button
         type="button"
         className="logout-button"
         onClick={() => {
-          localStorage.removeItem("username");
+          localStorage.clear();
           navigate("/login");
         }}
       >

@@ -65,3 +65,13 @@
     text-align: center;
     margin-top: 0.5rem;
 }
+
+.login {
+    margin: 20px;
+    background: transparent;
+    color: #cb9a06;
+    font-size: 0.8rem;
+    cursor: pointer;
+    text-decoration: underline;
+    transition: background 0.2s;
+}

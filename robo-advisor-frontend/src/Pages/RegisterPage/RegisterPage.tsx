@@ -2,20 +2,26 @@ import React, { useState, useEffect } from "react";
 import { replace, useNavigate } from "react-router-dom";
 import { RegisterForm } from "../../Components/RegisterCard/RegisterCard";
 import "./RegisterPage.css";
+import { Header } from "../../Components/Structure/Header";
 
 export const RegisterPage = () => {
     const [error, setError] = useState('');
     const navigate = useNavigate();
 
+            
+    // Redirect if already logged in
+    useEffect(() => {
+        const userId = localStorage.getItem("userId");
+        if (userId) {
+            navigate('/quiz', { replace: true });
+        }
+    }, [navigate]);
+
+    function handleLoginButton(){
+        navigate('/login')
+    }
+
     const handleRegister = async (email: string, password: string, confirmPassword: string) => {
-        
-        // Redirect if already logged in
-        useEffect(() => {
-            const userId = localStorage.getItem("userId");
-            if (userId) {
-                navigate('/quiz', { replace: true });
-            }
-        }, [navigate]);
         
         setError('');
         if(password !== confirmPassword){
@@ -43,6 +49,8 @@ export const RegisterPage = () => {
         <div className="register-card">
             <h2>Register</h2>
             <RegisterForm onSubmit={handleRegister} error={error}/>
+            <span className='login' onClick={handleLoginButton}>Login</span>
+
         </div>
     </div>);
 };
