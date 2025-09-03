@@ -69,31 +69,6 @@ def build_and_store_all_portfolios():
         "aggressive": df.loc[max_return_idx]
     }
 
-    # שמירה לדאטאבייס
-    db = SessionLocal()
-    try:
-        # 🧹 מחיקת כל התיקים הקודמים
-        db.query(Portfolio).delete()
-
-        # יצירת התיקים החדשים
-        for risk_level, row in selected.items():
-            weights = {
-                col.replace(" Weight", ""): float(row[col])
-                for col in row.index if "Weight" in col
-            }
-            portfolio = Portfolio(
-                risk_level=risk_level,
-                returns=float(row["Return"]),
-                volatility=float(row["Volatility"]),
-                sharpe=float(row["Sharpe"]),
-                weights=weights
-            )
-            db.add(portfolio)
-
-        db.commit()
-    finally:
-        db.close()
-
     # החזרה כ־dict
     return {
         level: {
@@ -108,12 +83,6 @@ def build_and_store_all_portfolios():
         for level, row in selected.items()
     }
 
-
-# להרצה עצמאית
-if __name__ == "__main__":
-    result = build_and_store_all_portfolios()
-    print("✅ Portfolios saved to DB")
-    print(result)
 
  # NO LONGER  USED
 def portfolio_optimization(risk_profile: str):

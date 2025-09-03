@@ -4,12 +4,14 @@ import './QuizPage.css';
 import { quizQuestions } from '../../Data/quizQuestions';
 import { QuestionCard } from '../../Components/QuestionCard/QuestionCard';
 import { useNavigate } from 'react-router-dom';
+import { Header } from '../../Components/Structure/Header';
 
 export const QuizPage = () => {
     const [currentIndex, setCurrentIndex] = useState(0);
     const [selectedIndexes, setSelectedIndexes] = useState<(number | null)[]>(
         Array(quizQuestions.length).fill(null)
     );
+    const [resetKey, setResetKey] = useState(0); 
     const navigate = useNavigate();
 
     const currentQuestion = quizQuestions[currentIndex];
@@ -43,12 +45,24 @@ export const QuizPage = () => {
         );
 
         try {
+            const rawUserId = localStorage.getItem("userId");
+            console.log("Raw user ID:", rawUserId);  // 👈 זה חשוב
+            const userId = parseInt(rawUserId!);
+            console.log("Parsed user ID:", userId);
+
+            const payload = {
+            answers: scores,
+            user_id: userId
+            };
+            console.log("Payload:", payload);
+
             const response = await fetch("http://127.0.0.1:8000/risk-profile", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
                 },
-                body: JSON.stringify({ answers: scores })
+                body: JSON.stringify({ answers: scores , user_id: parseInt(localStorage.getItem("userId")!) })
+                
             });
 
             if (!response.ok) {
@@ -65,7 +79,9 @@ export const QuizPage = () => {
     };
 
     return (
+
         <div className="quiz-page">
+            <Header />
             <QuestionCard
                 question={currentQuestion}
                 answer={selectedIndexes[currentIndex]}
