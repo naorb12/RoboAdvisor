@@ -9,6 +9,7 @@
     "@types/jest": "^27.0.1",
     "@types/node": "^16.7.13",
     "express": "^5.1.0",
+    "minimatch": "^10.0.3",
     "react": "^18.0.0",
     "react-dom": "^18.0.0",
     "react-router-dom": "^6.30.0",
@@ -42,6 +43,7 @@
     ]
   },
   "devDependencies": {
+    "@types/minimatch": "^6.0.0",
     "@types/react": "^19.1.8",
     "@types/react-dom": "^19.1.6",
     "@types/recharts": "^1.8.29"

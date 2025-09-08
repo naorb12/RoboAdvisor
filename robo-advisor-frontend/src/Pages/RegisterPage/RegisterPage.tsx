@@ -35,7 +35,7 @@ export const RegisterPage = () => {
         });
         if(response.ok){
             const data = await response.json();
-            localStorage.setItem("userId", data.userId);
+            localStorage.setItem("userId", data.user_id);
             localStorage.setItem("email", data.email);
             navigate('/login', { replace: true });
         } else {
